@@ -1,5 +1,7 @@
 package com.k2s3.controller;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,8 @@ public class S3Controller {
  
     @PostMapping(value= "/upload")
     public ResponseEntity<String> uploadFile(@RequestPart(value= "file") final MultipartFile multipartFile) {
-        service.uploadFile(multipartFile);
+    	File file1 = new File("toS3.txt");
+        service.uploadFile(file1);
         final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

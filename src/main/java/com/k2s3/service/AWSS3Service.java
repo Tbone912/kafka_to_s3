@@ -32,28 +32,19 @@ public class AWSS3Service {
 	// background thread
 	// but not consume the main thread.
 	@Async
-	public void uploadFile(final MultipartFile multipartFile) {
+	public void uploadFile(File file1) {
 		LOGGER.info("File upload in progress.");
 		try {
-			final File file = convertMultiPartFileToFile(multipartFile);
-			uploadFileToS3Bucket(bucketName, file);
+
+			uploadFileToS3Bucket(bucketName, file1);
 			LOGGER.info("File upload is completed.");
-			file.delete(); // To remove the file locally created in the project folder.
+			file1.delete(); // To remove the file locally created in the project folder.
 		} catch (final AmazonServiceException ex) {
 			LOGGER.info("File upload is failed.");
 			LOGGER.error("Error= {} while uploading file.", ex.getMessage());
 		}
 	}
 
-	private File convertMultiPartFileToFile(final MultipartFile multipartFile) {
-		final File file = new File(multipartFile.getOriginalFilename());
-		try (final FileOutputStream outputStream = new FileOutputStream(file)) {
-			outputStream.write(multipartFile.getBytes());
-		} catch (final IOException ex) {
-			LOGGER.error("Error converting the multi-part file to file= ", ex.getMessage());
-		}
-		return file;
-	}
 
 	private void uploadFileToS3Bucket(final String bucketName, final File file) {
 		final String uniqueFileName = LocalDateTime.now() + "_" + file.getName();
