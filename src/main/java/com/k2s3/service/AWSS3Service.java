@@ -32,13 +32,13 @@ public class AWSS3Service {
 	// background thread
 	// but not consume the main thread.
 	@Async
-	public void uploadFile(File file1) {
+	public void uploadFile() {
 		LOGGER.info("File upload in progress.");
 		try {
-
-			uploadFileToS3Bucket(bucketName, file1);
+			File file = new File("toS3.txt");
+			uploadFileToS3Bucket(bucketName, file);
 			LOGGER.info("File upload is completed.");
-			file1.delete(); // To remove the file locally created in the project folder.
+			file.delete();
 		} catch (final AmazonServiceException ex) {
 			LOGGER.info("File upload is failed.");
 			LOGGER.error("Error= {} while uploading file.", ex.getMessage());
